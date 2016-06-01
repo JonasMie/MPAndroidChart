@@ -48,7 +48,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
             return true;
 
         // if rotation by touch is enabled
-        if (mChart.isRotationEnabled()) {
+        if (mChart.isRotationEnabled() || mChart.isEditModeEnabled()) {
 
             float x = event.getX();
             float y = event.getY();
@@ -73,7 +73,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
                     break;
                 case MotionEvent.ACTION_MOVE:
 
-                    if (mChart.isDragDecelerationEnabled())
+                    if (mChart.isDragDecelerationEnabled() && !mChart.isEditModeEnabled())
                         sampleVelocity(x, y);
 
                     if (mTouchMode == NONE
@@ -82,7 +82,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
                         mLastGesture = ChartGesture.ROTATE;
                         mTouchMode = ROTATE;
                         mChart.disableScroll();
-                    } else if (mTouchMode == ROTATE) {
+                    } else if (mTouchMode == ROTATE && !mChart.isEditModeEnabled()) {
                         updateGestureRotation(x, y);
                         mChart.invalidate();
                     }
@@ -92,8 +92,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
                     break;
                 case MotionEvent.ACTION_UP:
 
-                    if (mChart.isDragDecelerationEnabled()) {
-
+                    if (mChart.isDragDecelerationEnabled() && !mChart.isEditModeEnabled()) {
                         stopDeceleration();
 
                         sampleVelocity(x, y);
@@ -147,7 +146,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
             l.onChartSingleTapped(e);
         }
 
-        if(!mChart.isHighlightPerTapEnabled()) {
+        if (!mChart.isHighlightPerTapEnabled()) {
             return false;
         }
 

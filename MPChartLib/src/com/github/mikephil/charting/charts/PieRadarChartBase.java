@@ -46,6 +46,9 @@ public abstract class PieRadarChartBase<T extends ChartData<? extends IDataSet<?
     /** Sets the minimum offset (padding) around the chart, defaults to 0.f */
     protected float mMinOffset = 0.f;
 
+    protected boolean editModeEnabled = false;
+
+
     public PieRadarChartBase(Context context) {
         super(context);
     }
@@ -501,5 +504,14 @@ public abstract class PieRadarChartBase<T extends ChartData<? extends IDataSet<?
             }
         });
         spinAnimator.start();
+    }
+
+
+    public boolean isEditModeEnabled() {
+        return editModeEnabled;
+    }
+
+    public void setEditModeEnabled(boolean editModeEnabled) {
+        this.editModeEnabled = editModeEnabled;
     }
 }
