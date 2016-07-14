@@ -128,6 +128,62 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
         if (l != null) {
             l.onChartLongPressed(me);
         }
+        float distance = mChart.distanceToCenter(me.getX(), me.getY());
+
+        // check if a slice was touched
+        if (distance > mChart.getRadius()) {
+
+            // if no slice was touched, highlight nothing
+
+            if (mLastHighlighted == null)
+                mChart.highlightValues(null); // no listener callback
+            else
+                mChart.highlightValue(null,true); // listener callback
+
+            mLastHighlighted = null;
+
+        } else {
+
+            float angle = mChart.getAngleForPoint(me.getX(), me.getY());
+
+            if (mChart instanceof PieChart) {
+                angle /= mChart.getAnimator().getPhaseY();
+            }
+
+            int index = mChart.getIndexForAngle(angle);
+
+            // check if the index could be found
+            if (index < 0) {
+
+                mChart.highlightValues(null);
+                mLastHighlighted = null;
+
+            } else {
+
+                List<SelectionDetail> valsAtIndex = mChart.getSelectionDetailsAtIndex(index);
+
+                int dataSetIndex = 0;
+
+                // get the dataset that is closest to the selection (PieChart
+                // only
+                // has one DataSet)
+                if (mChart instanceof RadarChart) {
+
+                    dataSetIndex = Utils.getClosestDataSetIndexByValue(
+                            valsAtIndex,
+                            distance / ((RadarChart) mChart).getFactor(),
+                            null);
+                }
+
+                if (dataSetIndex < 0) {
+                    mChart.highlightValues(null);
+                    mLastHighlighted = null;
+                } else {
+                    Highlight h = new Highlight(index, dataSetIndex);
+                    performHighlight(h, me);
+                }
+            }
+        }
     }
 
     @Override
