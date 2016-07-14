@@ -129,7 +129,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
             l.onChartLongPressed(me);
         }
 
-        float distance = mChart.distanceToCenter(e.getX(), e.getY());
+        float distance = mChart.distanceToCenter(me.getX(), me.getY());
         // check if a slice was touched
         if (distance > mChart.getRadius()) {
 
