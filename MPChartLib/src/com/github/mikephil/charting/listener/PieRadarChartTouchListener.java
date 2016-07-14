@@ -160,7 +160,7 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
             if (mLastHighlighted == null)
                 mChart.highlightValues(null); // no listener callback
             else
-                mChart.highlightTouch(null); // listener callback
+                mChart.highlightValue(null,true); // listener callback
 
             mLastHighlighted = null;
 
